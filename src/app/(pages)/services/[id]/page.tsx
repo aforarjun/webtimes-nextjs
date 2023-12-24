@@ -14,6 +14,7 @@ import { MdLoop, MdOutlineContactSupport } from "react-icons/md";
 import { BsArrowRightShort, BsFillLightningFill } from "react-icons/bs";
 import ServiceHeader from "./ServiceHeader";
 import SideBar from "./SideBar";
+import { RootState } from "@/redux/store/store";
 
 const {
   servicePage,
@@ -30,19 +31,21 @@ const {
 } = styles;
 
 const Page = ({ params, searchParams }: any) => {
-  const { service, loading } = useAppSelector((state) => state.service);
+  const { service, loading } = useAppSelector(
+    (state: RootState) => state.service
+  );
   const { id } = params;
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const [isOpenSidebar, setIsOpenSidebar] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(getService(id));
+    service?._id !== id && dispatch(getService(id));
 
     return () => {
       dispatch(clearService());
     };
-  }, [dispatch, id]);
+  }, [dispatch, id, service?._id]);
 
   if (loading)
     return (

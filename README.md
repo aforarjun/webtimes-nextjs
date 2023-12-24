@@ -1,2 +1,2 @@
-# webtimes-nextjs
- Webtimes - your business friend.
+# webtimes
+webtimes - Your business friend
