@@ -16,7 +16,7 @@ export const connectDb = async () => {
 
   try {
     const data = await mongoose.connect(process.env.MONGO_URL, {
-      dbName: "webtimes",
+      dbName: "cluster-webtimes-nextjs",
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
