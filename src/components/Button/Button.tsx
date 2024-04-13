@@ -8,7 +8,7 @@ type PropsType = {
   style?: React.CSSProperties;
   wrapperStyle?: React.CSSProperties;
   loading?: boolean;
-  btnType?: string;
+  btntype?: string;
   icon?: any;
   onClick?: any;
   type?: any;
@@ -20,7 +20,7 @@ const Button = ({
   style,
   wrapperStyle,
   loading = false,
-  btnType = "type1",
+  btntype = "type1",
   icon,
   onClick,
   type,
@@ -36,8 +36,8 @@ const Button = ({
 
       <button
         type={type}
-        className={`${button} ${btnType === "type2" && type2Button} ${
-          btnType === "type3" && type3Button
+        className={`${button} ${btntype === "type2" && type2Button} ${
+          btntype === "type3" && type3Button
         }`}
         style={style}
         onClick={onClick}

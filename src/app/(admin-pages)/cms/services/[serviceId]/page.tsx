@@ -78,7 +78,7 @@ function Page({ params }: any) {
             icon={<RiArrowGoBackFill />}
             text="Back to Services"
             onClick={() => back()}
-            btnType="type2"
+            btntype="type2"
           />
 
           {serviceId !== "_new" && (

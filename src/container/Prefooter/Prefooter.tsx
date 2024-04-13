@@ -23,7 +23,7 @@ function Prefooter() {
           <Link href="/contact-us">
             <Button
               title="Contact Us"
-              btnType="type2"
+              btntype="type2"
               style={{ color: "var(--white-color)" }}
             />
           </Link>

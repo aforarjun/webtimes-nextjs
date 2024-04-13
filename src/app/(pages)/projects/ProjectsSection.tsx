@@ -40,7 +40,7 @@ const ProjectsSection = () => {
     (state: RootState) => state.project
   );
   const [filters, setFilters] = useState<FilterProps>({
-    categories: [{ label: "Websites", value: "Websites" }],
+    categories: [],
     technologies: [],
     pricing: [],
     rating: 0,
@@ -60,6 +60,11 @@ const ProjectsSection = () => {
             pr.categories.some((prCat) => {
               return filters.categories.some(
                 (cat) => prCat.value === cat.value
+              );
+            }) &&
+            pr.technologies.some((prTech) => {
+              return filters.technologies.some(
+                (tech) => prTech.value === tech.value
               );
             })
           )

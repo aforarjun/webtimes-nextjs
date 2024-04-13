@@ -32,7 +32,7 @@ type FormData = {
 };
 
 const LoginForm = () => {
-  const router = useRouter();
+  const {push} = useRouter();
   const dispatch = useAppDispatch();
   const { loading, isAuthenticated, isError, msg } = useAppSelector(
     (state: any) => state.authUser
@@ -50,15 +50,17 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    if (isAuthenticated) router.back();
+    if (isAuthenticated) push('/');
     else dispatch(clearErrorMsg());
-  }, [isAuthenticated, isDirty, dispatch, router]);
+  }, [isAuthenticated, isDirty, dispatch, push]);
 
   const loginUser = async (data: any) => {
     try {
       const { payload }: any = await dispatch(login(data));
-      toast.success(payload.message);
-      router.back();
+      
+      if(payload.success){
+        toast.success(payload.message);
+      }
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -82,16 +84,17 @@ const LoginForm = () => {
       />
       {isError && <p className="errorStyle">{msg}</p>}
 
-      <Link href="/userAuth/forget-password">
-        <p
-          style={{
-            color: "#0000EE",
-            marginTop: 5,
-            cursor: "pointer",
-            textAlign: "right",
-          }}>
-          Forget Password
-        </p>
+      <Link
+        href="/userAuth/forget-password"
+        style={{
+          display: 'block',
+          color: "#0000EE",
+          marginTop: 5,
+          cursor: "pointer",
+          textAlign: "right",
+        }}
+      >
+        Forget Password
       </Link>
 
       <Button

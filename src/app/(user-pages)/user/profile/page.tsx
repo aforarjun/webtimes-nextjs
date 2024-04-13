@@ -5,19 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiEdit2 } from "react-icons/fi";
 import { LuSettings } from "react-icons/lu";
-import { GoPlus } from "react-icons/go";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/free-mode";
 import { FreeMode } from "swiper/modules";
 
 import styles from "@/styles/profilePage.module.scss";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { Button, Loader, Modal, ProfileIcon, Tooltip } from "@/components";
+import { Button, Loader, Modal, Tooltip } from "@/components";
 import { getAllOrders } from "@/redux/slices/orderSlice";
 import { useSocket } from "@/providers/socketIo";
-import { FetchDirectConversations } from "@/redux/slices/conversationSlice";
 import toast from "react-hot-toast";
 import { IoIosRefresh } from "react-icons/io";
+import ActiveChats from "./ActiveChats";
 
 const {
   profile,
@@ -25,32 +24,27 @@ const {
   left,
   right,
   activeChatsSection,
-  activeChatsContainer,
   activeOrdersSection,
   activeOrdersContainer,
   orderBox,
 } = styles;
 
 const Page = () => {
-  const { logggedInUser }: any = useAppSelector((state) => state.authUser);
+  const { logggedInUser: { _id: userId = "", name = "", email = "", role = "user" } }: any = useAppSelector((state) => state.authUser);
   const { loading: ordersLoading, orders }: any = useAppSelector(
     (state) => state.order
   );
-  const {
-    direct_chat: { conversations },
-  } = useAppSelector((state) => state.conversation);
   const dispatch = useAppDispatch();
 
-  const { _id: userId = "", name = "", email = "" } = logggedInUser || "";
   const { socket, isConnected } = useSocket();
-  const [isOpenDialong, setIsOpenDialong] = useState(false);
-  const [refreshChats, setRefreshChats] = useState(false);
-  const [refreshOrders, setRefreshOrders] = useState(false);
+  const [isOpenDialong, setIsOpenDialong] = useState<boolean>(false);
+  const [refreshOrders, setRefreshOrders] = useState<boolean>(false);
+
 
   const breakPoints = {
     300: {
       slidesPerView: 1,
-      spaceBetween: 0,
+      spaceBetween: 25,
     },
     768: {
       slidesPerView: 2,
@@ -62,7 +56,7 @@ const Page = () => {
     },
     1500: {
       slidesPerView: 4,
-      spaceBetween: 20,
+      spaceBetween: 30,
     },
   };
 
@@ -70,26 +64,16 @@ const Page = () => {
     dispatch(getAllOrders(userId));
   }, [userId, refreshOrders, dispatch]);
 
-  useEffect(() => {
-    userId &&
-      socket?.emit(
-        "get_conversations_list",
-        { user_id: userId },
-        (data: any) => {
-          dispatch(FetchDirectConversations({ conversations: data }));
-        }
-      );
-  }, [socket, userId, refreshChats, dispatch]);
-
   const AddNewChat = (
     orderId: string,
-    name: string,
+    orderName: string,
+    orderImg: string = '',
     userId: string,
     adminId: string
   ) => {
     socket.emit(
       "add_conversation",
-      { name, to: adminId, from: userId, orderId: orderId },
+      { orderName, orderImg, to: adminId, from: userId, orderId: orderId },
       ({ exist, chat }: any) => {
         exist
           ? toast.success(
@@ -112,72 +96,26 @@ const Page = () => {
           <h2>WebTimes Member</h2>
           <h3>Welcome! {name || "user"}</h3>
           <p>{email || "email****@gmail.com"}</p>
+          {role === "admin" && <p><Link className="link" href={`/cms?isAdmin=${true}&adminToken=${process.env.NEXT_PUBLIC_ADMIN_ID}`}>Go to Admin Portel</Link></p>}
         </div>
 
         <div className={right}>
           <Link href="/user/edit-profile">
             <Button title="Edit profile" icon={<FiEdit2 size={20} />} />
           </Link>
-          <Button
-            title="Help & Settings"
-            icon={<LuSettings size={20} />}
-            btnType="type2"
-          />
+          <Link href="/user/user-settings">
+            <Button
+              title="Help & Settings"
+              icon={<LuSettings size={20} />}
+              btntype="type2"
+            />
+          </Link>
         </div>
       </header>
 
       {/* Active Chats ------------------ */}
       <div className={activeChatsSection}>
-        <div className="flex" style={{ justifyContent: "flex-start" }}>
-          <Tooltip text={"Refresh Chats"} style={{ left: 50 }}>
-            <IoIosRefresh
-              size={20}
-              color="var(--black-color)"
-              style={{ marginRight: 20, cursor: "pointer" }}
-              onClick={() => setRefreshChats(!refreshChats)}
-            />
-          </Tooltip>
-          <h3>Active Chats about orders</h3>
-        </div>
-
-        <div className={activeChatsContainer}>
-          <div
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: "50%",
-              backgroundColor: "Var(--exLightGray-color)",
-              border: "1px solid var(--secondary-color)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => setIsOpenDialong(true)}>
-            <GoPlus size={30} color="var(--white-color)" />
-          </div>
-
-          {isConnected ? (
-            conversations.length ? (
-              conversations.map((conv: any) => (
-                <Link
-                  key={conv.id}
-                  href={{
-                    pathname: "/user/chats",
-                    query: { room_id: conv.id },
-                  }}>
-                  <div key={conv.id} style={{ cursor: "pointer" }}>
-                    <ProfileIcon name={conv.chat_name} img={conv.img} />
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p>No Active Chats, Create one to start</p>
-            )
-          ) : (
-            <p>Please wait, connecting....</p>
-          )}
-        </div>
+        <ActiveChats socket={socket} isConnected={isConnected} userId={userId} dispatch={dispatch} setIsOpenDialong={setIsOpenDialong} />
       </div>
 
       {/* Orders going on -------------- */}
@@ -187,8 +125,10 @@ const Page = () => {
             <IoIosRefresh
               size={20}
               color="var(--black-color)"
-              style={{ marginRight: 20, cursor: "pointer" }}
+              style={{ marginRight: 20, cursor: "pointer", transition: "all 0.2s ease" }}
               onClick={() => setRefreshOrders(!refreshOrders)}
+              onMouseDownCapture={(e:any) => e.target.style.transform = "rotate(90deg)"}
+              onMouseUpCapture={(e:any) => e.target.style.transform = "rotate(0deg)"}
             />
           </Tooltip>
           <h3> On going Orders.</h3>
@@ -199,7 +139,7 @@ const Page = () => {
         ) : orders.length ? (
           <Swiper
             slidesPerView={4}
-            spaceBetween={10}
+            spaceBetween={20}
             freeMode={true}
             pagination={{ clickable: true }}
             modules={[FreeMode]}
@@ -218,34 +158,36 @@ const Page = () => {
                 <SwiperSlide className={orderBox} key={String(_id)}>
                   <Link href={`/user/orders/${_id}`}>
                     <Image
-                      src={`/upload/services/${service?.thumbnail}`}
+                      src={service.image ? `/upload/services/${service?.image}` : '/project-demo.jpg'}
                       sizes="250px"
                       fill
                       alt={service.name}
                     />
                   </Link>
 
-                  <Link href={`/user/orders/${_id}`}>
-                    <header>
-                      <Image
-                        src={user.avatar}
-                        width={50}
-                        height={50}
-                        alt={name}
-                      />
-                      <h4>{projectName || user.name}</h4>
-                    </header>
-                  </Link>
+                  <article>
+                    <Link href={`/user/orders/${_id}`}>
+                      <header className="flex">
+                        <Image
+                          src={user.avatar}
+                          width={50}
+                          height={50}
+                          alt={name}
+                        />
+                        <h4>{projectName || user.name}</h4>
+                      </header>
+                    </Link>
 
-                  <div>
-                    <p>TYPE: {orderDetails.type}</p>
-                    <p>{orderDetails.name}</p>
-                  </div>
-                  <div>
-                    <p>PRICE: {totalPrice}</p>
-                    <p>{orderDetails.delivery} days</p>
-                  </div>
-                  <p>Ordered: {createdAt}</p>
+                    <div className="flex">
+                      <p>TYPE: {orderDetails.type}</p>
+                      <p>{orderDetails.name}</p>
+                    </div>
+                    <div className="flex">
+                      <p>PRICE: {totalPrice}</p>
+                      <p>{orderDetails.delivery} days</p>
+                    </div>
+                    <p>Ordered: {createdAt}</p>
+                  </article>
                 </SwiperSlide>
               )
             )}
@@ -280,11 +222,12 @@ const Page = () => {
                   </div>
                   <Button
                     title="Select"
-                    btnType="type3"
+                    btntype="type3"
                     onClick={() =>
                       AddNewChat(
                         _id,
                         projectName,
+                        service.image,
                         userId,
                         `${process.env.NEXT_PUBLIC_ADMIN_ID}`
                       )

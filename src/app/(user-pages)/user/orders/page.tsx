@@ -95,7 +95,7 @@ const Page = () => {
                 <td>
                   <Button
                     icon={<GrFormView size={25} />}
-                    btnType="type3"
+                    btntype="type3"
                     onClick={() => push(`${pathname}/${row._id}`)}
                   />
                 </td>

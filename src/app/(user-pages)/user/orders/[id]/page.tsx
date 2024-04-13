@@ -52,7 +52,7 @@ const Page = ({ params }: any) => {
             <p>{createdAt}</p>
           </div>
 
-          <Button title={status} btnType="type2" />
+          <Button title={status} btntype="type2" />
         </header>
 
         <section className={serviceCard}>

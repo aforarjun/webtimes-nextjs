@@ -37,12 +37,12 @@ export const PATCH = async (req: NextRequest, { params }: any) => {
 
     const thumbnail: any = formData.get("thumbnail");
     if (!thumbnail) return ErrorRes(false, "No file received.", 400);
-
+    
     const service = await Service.findById(id);
-
+    
     if (!service) return ErrorRes(false, "Service id Not found", 400);
-
-    const isUpload = service.thumbmail === thumbnail;
+    
+    const isUpload = service.thumbnail !== thumbnail;
     const oldThumbnail = service.thumbnail;
 
     // upload a thumbmail

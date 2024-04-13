@@ -22,7 +22,7 @@ const Filters = ({ filters, setFilters, clearFilters }: any) => {
           justifyContent: "space-between",
         }}>
         <div>
-          <Button title="Clear All" btnType="type3" onClick={clearFilters} />
+          <Button title="Clear All" btntype="type3" onClick={clearFilters} />
         </div>
 
         <p style={{ marginTop: 0 }}>Filters</p>

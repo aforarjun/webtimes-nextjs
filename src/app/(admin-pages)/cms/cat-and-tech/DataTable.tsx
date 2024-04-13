@@ -71,7 +71,7 @@ const DataTable = ({ title, list, name }: any) => {
                       onClick={() => deleteRow(row)}
                       loading={loading}
                       disabled={loading}
-                      btnType="type3"
+                      btntype="type3"
                     />
                   </td>
                 </tr>
@@ -117,7 +117,6 @@ const Dialog = ({ name, dispatch, loading, setLoading }: any) => {
     }
 
     setLoading(true);
-    console.log("hello");
 
     const { payload }: any = await dispatch(
       addData({
@@ -146,7 +145,7 @@ const Dialog = ({ name, dispatch, loading, setLoading }: any) => {
 
       <Button
         title="Add"
-        btnType="type2"
+        btntype="type2"
         wrapperStyle={{ marginTop: 30 }}
         onClick={() => addValue()}
         icon={<AiOutlinePlusCircle size={20} />}

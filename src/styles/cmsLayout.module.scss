@@ -11,4 +11,14 @@
   display: grid;
   position: relative;
   padding-left: 70px;
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    overflow: hidden;
+    margin-left: 0;
+    padding: 0 0.8rem;
+    width: 100%;
+  }
 }

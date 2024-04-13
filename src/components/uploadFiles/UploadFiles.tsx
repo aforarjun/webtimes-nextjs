@@ -34,49 +34,26 @@ const UploadFiles = ({
 
     setIsLoading(true);
 
-    const { success, message, error, result } = await uploadImages(filesArr);
-
-    if (success) {
+    try {
+      const { message, result } = await uploadImages(filesArr);
+      
       toast.success(message);
       setResultUrls(result);
       setIsLoading(false);
-    } else {
+    } catch (error:any) {
       toast.error(error);
       setIsLoading(false);
     }
-  };
 
-  const handleReplaceImage = async (e: any, image: string) => {
-    console.log(image);
-    // if (!image || !e.target.files[0]) return;
 
-    // setLoading(true);
-    // console.log("file", image, e.target.files[0]);
-    // const data = await replaceImage(image, e.target.files[0]);
-
-    // if (data.success) {
-    //   toast.success(data.message);
-    //   setLoading(false);
+    // if (success) {
+    //   toast.success(message);
+    //   setResultUrls(result);
+    //   setIsLoading(false);
     // } else {
-    //   toast.error(data.error);
-    //   setLoading(false);
+    //   toast.error(error);
+    //   setIsLoading(false);
     // }
-  };
-
-  const handleDeleteImage = async (filename: string) => {
-    if (!filename) return;
-
-    setIsLoading(true);
-
-    const data = await deleteImage(filename);
-
-    if (data.success) {
-      toast.success(data.message);
-      setIsLoading(false);
-    } else {
-      toast.error(data.error);
-      setIsLoading(false);
-    }
   };
 
   return (

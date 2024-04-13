@@ -69,14 +69,14 @@ const ChatElement = ({
           style={{ justifyContent: "space-between", gap: 8 }}>
           <Avatar img={img} online={online} />
           <div>
-            <h4 style={{ fontWeight: 500 }}>{chat_name}</h4>
+            <h4 style={{ fontWeight: 500, fontSize: 16 }}>{chat_name}</h4>
             <p style={{ marginTop: 4, fontWeight: unread ? "bold" : "normal" }}>
               {msg && trimContent(msg, 20)}
             </p>
           </div>
         </div>
         <div className="flex" style={{ flexDirection: "column", gap: 8 }}>
-          {time && <h5 style={{ fontWeight: 600 }}>{showTime(time)}</h5>}
+          {time && <h5 style={{ fontWeight: 400, fontSize: 12 }}>{showTime(time)}</h5>}
           {unread ? <div className="unread-count">{unread}</div> : null}
         </div>
       </div>
