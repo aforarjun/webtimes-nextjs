@@ -1,11 +1,11 @@
 'use client'
 
-import * as Ably from 'ably';
+// import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
 
 export default function AblyProviderContainer({ children }: { children: React.ReactNode }) {
 
-  const client = new Ably.Realtime.Promise({ authUrl: '/api/chats' });
+  // const client = new Ably.Realtime.Promise({ authUrl: '/api/chats' });
 
 
   // const { channel, ably } = useChannel("chat-demo", (message) => {
@@ -38,7 +38,7 @@ export default function AblyProviderContainer({ children }: { children: React.Re
   // });
 
   return (
-    <AblyProvider client={ client }>
+    <AblyProvider>
       {children}
     </AblyProvider>
   )
