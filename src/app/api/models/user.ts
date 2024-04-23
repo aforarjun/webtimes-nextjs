@@ -30,7 +30,7 @@ const userModel = new Schema(
         },
         avatar: {
             type: String,
-            default: '/user.png',
+            default: '',
         },
         number: {
             type: String,

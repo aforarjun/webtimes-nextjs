@@ -78,7 +78,7 @@ const Header = () => {
                   className={profileIcon}
                   onClick={() => setOpenProfile(!openProfile)}>
                   <Image
-                    src={`/upload/avatar/${logggedInUser.avatar}`}
+                    src={logggedInUser.avatar ? `/upload/avatar/${logggedInUser.avatar}` : '/user.png'}
                     width={40}
                     height={40}
                     alt={logggedInUser.username}
