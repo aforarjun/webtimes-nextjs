@@ -89,9 +89,9 @@ function Page() {
 
             <div className={socialMedia}>
               {socialLinks.map(({ social, link, icon }) => (
-                <Link key={social} href={link}>
+                <a key={social} href={link} target="_blank">
                   <span>{icon}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
