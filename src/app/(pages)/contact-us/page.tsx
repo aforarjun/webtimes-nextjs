@@ -26,17 +26,17 @@ const {
 const socialLinks = [
   {
     social: "facebook",
-    link: "/",
+    link: "https://www.linkedin.com/in/arjun-singh-549934182",
     icon: <CiFacebook size={40} />,
   },
   {
     social: "linkedIn",
-    link: "/",
+    link: "https://www.linkedin.com/in/arjun-singh-549934182",
     icon: <AiFillLinkedin size={40} />,
   },
   {
     social: "Instagram",
-    link: "/",
+    link: "https://www.instagram.com/webtimessolutions/",
     icon: <AiOutlineInstagram size={40} />,
   },
 ];
@@ -82,7 +82,7 @@ function Page() {
                 <AiOutlineClockCircle size={40} />
                 <div>
                   <h4>Business Hours :</h4>
-                  <p>Monday - Sunday : 27x7</p>
+                  <p>Monday - Sunday : 24x7</p>
                 </div>
               </div>
             </div>
